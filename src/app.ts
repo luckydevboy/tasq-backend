@@ -5,7 +5,7 @@ import morgan from "morgan";
 // import cors from "cors";
 import mongoose from "mongoose";
 
-import { authRoutes } from "./routes";
+import { authRoutes, taskRoutes } from "./routes";
 
 const app: Application = express();
 const port = process.env.PORT as string;
@@ -21,6 +21,7 @@ app.use(bodyParser.json());
 app.use(morgan("tiny"));
 
 app.use("/auth", authRoutes);
+app.use("/tasks", taskRoutes);
 
 mongoose
   .connect(process.env.MONGODB_URI as string)
