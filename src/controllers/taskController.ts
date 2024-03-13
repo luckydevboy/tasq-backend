@@ -9,7 +9,11 @@ export const getAllTasks = async (req: Request, res: Response) => {
   const pageSize = parseInt(req.query.pageSize as string) || 10;
 
   try {
-    const tasks = await Task.find({ user: decodeAuthToken(req)?.id })
+    const userId = decodeAuthToken(req)?.id;
+
+    const totalCount = await Task.countDocuments({ user: userId });
+
+    const tasks = await Task.find({ user: userId })
       .sort({ createdAt: -1 })
       .skip((page - 1) * pageSize || 0)
       .limit(pageSize || 10);
@@ -18,6 +22,7 @@ export const getAllTasks = async (req: Request, res: Response) => {
       status: "success",
       data: {
         tasks,
+        total: totalCount
       },
     });
   } catch (err) {
