@@ -2,7 +2,7 @@ import "dotenv/config";
 import express, { Application } from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
-// import cors from "cors";
+import cors from "cors";
 import mongoose from "mongoose";
 
 import { authRoutes, taskRoutes } from "./routes";
@@ -12,11 +12,12 @@ const port = process.env.PORT as string;
 
 app.use(bodyParser.json());
 
-// const corsOptions = {
-//   origin: ["http://localhost:3000"],
-//   optionsSuccessStatus: 200,
-// };
-// app.use(cors(corsOptions));
+const corsOptions = {
+  origin: ["http://localhost:3000"],
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 // TODO: Just in dev mode
 app.use(morgan("tiny"));
 
