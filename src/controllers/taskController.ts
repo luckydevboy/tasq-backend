@@ -4,25 +4,42 @@ import { Task } from "../models";
 import { decodeAuthToken } from "../utils";
 import handleErrors from "../utils/handleErrors";
 
-export const getAllTasks = async (req: Request, res: Response) => {
-  const page = parseInt(req.query.page as string) || 1;
-  const pageSize = parseInt(req.query.pageSize as string) || 10;
+// export const getAllTasks = async (req: Request, res: Response) => {
+//   const page = parseInt(req.query.page as string) || 1;
+//   const pageSize = parseInt(req.query.pageSize as string) || 10;
 
+//   try {
+//     const userId = decodeAuthToken(req)?.id;
+
+//     const totalCount = await Task.countDocuments({ user: userId });
+
+//     const tasks = await Task.find({ user: userId })
+//       .sort({ createdAt: -1 })
+//       .skip((page - 1) * pageSize || 0)
+//       .limit(pageSize || 10);
+
+//     return res.json({
+//       status: "success",
+//       data: {
+//         tasks,
+//         total: totalCount
+//       },
+//     });
+//   } catch (err) {
+//     return handleErrors(err, res);
+//   }
+// };
+
+export const getAllTasks = async (req: Request, res: Response) => {
   try {
     const userId = decodeAuthToken(req)?.id;
 
-    const totalCount = await Task.countDocuments({ user: userId });
-
-    const tasks = await Task.find({ user: userId })
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * pageSize || 0)
-      .limit(pageSize || 10);
+    const tasks = await Task.find({ user: userId }).sort({ createdAt: -1 });
 
     return res.json({
       status: "success",
       data: {
         tasks,
-        total: totalCount
       },
     });
   } catch (err) {
