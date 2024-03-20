@@ -52,12 +52,22 @@ interface QueryToday {
   scheduledDate?: { $gte: number; $lt: number };
 }
 
+interface QueryDefault {
+  user: string;
+  $or?: ({ deleted: boolean } | { deleted: { $exists: boolean } })[];
+}
+
 export const getTasks = async (req: Request, res: Response) => {
   try {
     const userId = decodeAuthToken(req)?.id;
     const filter = req.params.filter as Filter;
 
-    let query: QueryScheduled | QueryCompleted | QueryDeleted | QueryToday;
+    let query:
+      | QueryScheduled
+      | QueryCompleted
+      | QueryDeleted
+      | QueryToday
+      | QueryDefault;
 
     switch (filter) {
       case "scheduled":
@@ -79,7 +89,10 @@ export const getTasks = async (req: Request, res: Response) => {
         };
         break;
       default:
-        query = { user: userId };
+        query = {
+          user: userId,
+          $or: [{ deleted: false }, { deleted: { $exists: false } }],
+        };
     }
 
     const tasks = await Task.find(query).sort({ createdAt: -1 });
