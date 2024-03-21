@@ -9,6 +9,7 @@ const taskSchema = new Schema<ITask>(
     completed: Boolean,
     deleted: Boolean,
     user: { type: Schema.Types.ObjectId, ref: "User" },
+    dueDate: String
   },
   { timestamps: true },
 );
