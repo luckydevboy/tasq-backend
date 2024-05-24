@@ -13,7 +13,7 @@ const port = process.env.PORT as string;
 app.use(bodyParser.json());
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://tasq.liara.run"],
+  origin: ["http://localhost:3000", "https://tasq-six.vercel.app"],
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
